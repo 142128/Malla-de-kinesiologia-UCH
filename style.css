@@ -1,61 +1,134 @@
-body {
-  font-family: sans-serif;
-  background: #f7f3fb;
-  margin: 0;
-  padding: 20px;
-}
+const cursosPorSemestre = [
+  ["1° Año – Semestre I", [
+    { nombre: 'Bases integradas de química, bioquímica, biología celular y genética', id: 'bioquimica' },
+    { nombre: 'Anatomía estructural y funcional I', id: 'anatomia1' },
+    { nombre: 'Introducción al movimiento humano', id: 'movimiento1' },
+    { nombre: 'Física para el estudio de la kinesiología', id: 'fisica' },
+    { nombre: 'Estrategias de búsqueda bibliográfica', id: 'busqueda' },
+    { nombre: 'Principios de evolución', id: 'evolucion' },
+    { nombre: 'Inglés I', id: 'ingles1' },
+    { nombre: 'Formación general I', id: 'fg1' }
+  ]],
+  ["1° Año – Semestre II", [
+    { nombre: 'Anatomía estructural y funcional II', id: 'anatomia2', requiere: ['anatomia1'] },
+    { nombre: 'Estructura y función tisular', id: 'tisular' },
+    { nombre: 'Biomecánica, lesión y reparación tisular', id: 'biomecanica', requiere: ['fisica', 'bioquimica'] },
+    { nombre: 'Introducción a la kinesiología', id: 'introkin' },
+    { nombre: 'Lectura comprensiva de artículos científicos', id: 'lectura1', requiere: ['busqueda'] },
+    { nombre: 'Inglés II', id: 'ingles2', requiere: ['ingles1'] },
+    { nombre: 'Formación general II', id: 'fg2' }
+  ]],
+  ["2° Año – Semestre III", [
+    { nombre: 'Fisiología de sistemas', id: 'fisiologia', requiere: ['bioquimica'] },
+    { nombre: 'Bases integradas de infectología, inmunología y farmacología general', id: 'infecto', requiere: ['fisiologia'] },
+    { nombre: 'Examen kinésico básico', id: 'examen', requiere: ['anatomia2', 'movimiento1'] },
+    { nombre: 'Control y aprendizaje motor', id: 'control', requiere: ['anatomia2'] },
+    { nombre: 'Fundamentos de la investigación científica', id: 'invest1', requiere: ['lectura1'] },
+    { nombre: 'Educación física I', id: 'ef1' },
+    { nombre: 'Inglés III', id: 'ingles3', requiere: ['ingles2'] }
+  ]],
+  ["2° Año – Semestre IV", [
+    { nombre: 'Fisiopatología y farmacología de sistemas', id: 'fisiopato', requiere: ['fisiologia'] },
+    { nombre: 'Procedimientos terapéuticos básicos y generales', id: 'procedimientos', requiere: ['examen'] },
+    { nombre: 'Examen de la condición física y conducta motora', id: 'condicion', requiere: ['control', 'movimiento1'] },
+    { nombre: 'Kinesiología del desarrollo psicomotor', id: 'psicomotor', requiere: ['control', 'movimiento1'] },
+    { nombre: 'Análisis bioinstrumental del movimiento humano', id: 'bioinstrumental', requiere: ['biomecanica'] },
+    { nombre: 'Lectura crítica de artículos científicos', id: 'lectura2', requiere: ['invest1'] },
+    { nombre: 'Inglés IV', id: 'ingles4', requiere: ['ingles3'] },
+    { nombre: 'Formación general III', id: 'fg3' }
+  ]],
+  ["3° Año – Semestre V", [
+    { nombre: 'Evaluación e intervención en neurokinesiología I', id: 'neuro1', requiere: ['psicomotor'] },
+    { nombre: 'Evaluación e intervención en cuidados respiratorios I', id: 'resp1', requiere: ['fisiopato'] },
+    { nombre: 'Evaluación e intervención en músculo-esquelético I', id: 'msk1', requiere: ['procedimientos', 'biomecanica'] },
+    { nombre: 'Efectos de la actividad física en la salud', id: 'actividad1' },
+    { nombre: 'Proyecto de investigación I', id: 'proy1', requiere: ['invest1'] },
+    { nombre: 'Análisis del modelo de salud chileno', id: 'modelo_salud', requiere: ['fg3'] },
+    { nombre: 'Módulo interdisciplinario I', id: 'modulo1' },
+    { nombre: 'Educación física II', id: 'ef2' }
+  ]],
+  ["3° Año – Semestre VI", [
+    { nombre: 'Evaluación e intervención en neurokinesiología II', id: 'neuro2', requiere: ['neuro1'] },
+    { nombre: 'Evaluación e intervención en cuidados respiratorios II', id: 'resp2', requiere: ['resp1'] },
+    { nombre: 'Evaluación e intervención en músculo-esquelético II', id: 'msk2', requiere: ['msk1'] },
+    { nombre: 'Razonamiento clínico', id: 'razonamiento', requiere: ['neuro2', 'resp2', 'msk2'] },
+    { nombre: 'Diseño y formulación de proyectos de investigación', id: 'proy2', requiere: ['proy1'] },
+    { nombre: 'Actividad física y deportes', id: 'deportes' },
+    { nombre: 'Responsabilidad del ejercicio profesional', id: 'responsabilidad' },
+    { nombre: 'Formación general IV', id: 'fg4' }
+  ]],
+  ["4° Año – Semestre VII", [
+    { nombre: 'Intervención profesional en contexto I', id: 'interv1', requiere: ['msk2', 'neuro2', 'resp2'] },
+    { nombre: 'Estrategias deportivas y recreativas', id: 'estrategias1' },
+    { nombre: 'Determinantes sociales de la salud', id: 'determinantes', requiere: ['modelo_salud'] },
+    { nombre: 'Análisis de la relación persona–entorno', id: 'entorno' },
+    { nombre: 'Ejecución de proyectos de investigación I', id: 'ejec1', requiere: ['proy2'] },
+    { nombre: 'Conceptos básicos de administración en salud', id: 'admin1' },
+    { nombre: 'Metodologías de enseñanza-aprendizaje', id: 'metodologia' },
+    { nombre: 'Formación general V', id: 'fg5' }
+  ]],
+  ["4° Año – Semestre VIII", [
+    { nombre: 'Intervención profesional en contexto II', id: 'interv2', requiere: ['interv1'] },
+    { nombre: 'Evaluación ergonómica', id: 'ergonomia', requiere: ['biomecanica', 'msk1'] },
+    { nombre: 'Estrategias deportivas y recreativas aplicadas', id: 'estrategias2' },
+    { nombre: 'Programas de promoción y prevención en salud', id: 'promoprev' },
+    { nombre: 'Ejecución de proyectos de investigación II', id: 'ejec2', requiere: ['ejec1'] },
+    { nombre: 'Proyectos de emprendimiento', id: 'emprendimiento' },
+    { nombre: 'Aplicación básica de metodologías docentes', id: 'metodologia2' },
+    { nombre: 'Módulo interdisciplinario II', id: 'modulo2' }
+  ]],
+  ["5° Año – Semestres IX y X", [
+    { nombre: 'Intervención profesional I', id: 'final1', requiere: ['interv2'] },
+    { nombre: 'Intervención profesional II', id: 'final2', requiere: ['final1'] },
+    { nombre: 'Proyectos de intervención ergonómica', id: 'final_ergonomia', requiere: ['ergonomia'] },
+    { nombre: 'Intervención en salud comunitaria', id: 'salud_com', requiere: ['promoprev', 'determinantes'] },
+    { nombre: 'Cursos de profundización disciplinar y profesional', id: 'profdisc' },
+    { nombre: 'Comunicación científica', id: 'comunicacion', requiere: ['ejec2'] },
+    { nombre: 'Administración en salud', id: 'admin2', requiere: ['admin1'] }
+  ]]
+];
 
-h1 {
-  text-align: center;
-  color: #5e2a87;
-}
+const malla = document.getElementById('malla');
+const estados = {};
 
-.malla {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 20px;
-  justify-content: center;
-}
+cursosPorSemestre.forEach(([titulo, semestre]) => {
+  const columna = document.createElement('div');
+  columna.className = 'semestre';
 
-.semestre {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border: 2px solid #5e2a87;
-  padding: 10px;
-  border-radius: 10px;
-  background: #f3e9ff;
-  min-width: 240px;
-}
+  const encabezado = document.createElement('h2');
+  encabezado.textContent = titulo;
+  columna.appendChild(encabezado);
 
-.semestre h2 {
-  font-size: 16px;
-  color: #5e2a87;
-  margin: 0 0 10px 0;
-  text-align: center;
-}
+  semestre.forEach(curso => {
+    const div = document.createElement('div');
+    div.className = 'course';
+    div.id = curso.id;
+    div.textContent = curso.nombre;
 
-.course {
-  background-color: #dabfff;
-  border: 2px solid #5e2a87;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s;
-  opacity: 0.5;
-}
+    if (!curso.requiere) div.classList.add('unlocked');
 
-.course.unlocked {
-  opacity: 1;
-}
+    div.addEventListener('click', () => aprobar(curso));
+    columna.appendChild(div);
+  });
 
-.course.approved {
-  background-color: #c19bff;
-  text-decoration: line-through;
-}
+  malla.appendChild(columna);
+});
 
-.course:hover {
-  transform: scale(1.05);
+function aprobar(curso) {
+  const div = document.getElementById(curso.id);
+  if (!div.classList.contains('unlocked') || div.classList.contains('approved')) return;
+
+  div.classList.add('approved');
+  estados[curso.id] = true;
+
+  cursosPorSemestre.forEach(([_, semestre]) => {
+    semestre.forEach(c => {
+      if (c.requiere && !document.getElementById(c.id).classList.contains('approved')) {
+        const allOk = c.requiere.every(r => estados[r]);
+        if (allOk) {
+          document.getElementById(c.id).classList.add('unlocked');
+        }
+      }
+    });
+  });
 }
