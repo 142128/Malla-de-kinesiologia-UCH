@@ -1,1 +1,45 @@
+body {
+  font-family: sans-serif;
+  background: #f7f3fb;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #5e2a87;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.course {
+  background-color: #dabfff;
+  border: 2px solid #5e2a87;
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  opacity: 0.5;
+}
+
+.course.unlocked {
+  opacity: 1;
+}
+
+.course.approved {
+  background-color: #c19bff;
+  text-decoration: line-through;
+}
+
+.course:hover {
+  transform: scale(1.05);
+}
 
